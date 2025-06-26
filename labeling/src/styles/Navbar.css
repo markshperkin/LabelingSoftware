@@ -1,11 +1,9 @@
-/* Navbar.css */
-
 .navbar {
-  position: fixed;     /* pin it */
+  position: fixed; 
   top: 0;
   left: 0;
   right: 0;
-  height: 3rem;        /* pick a height */
+  height: 3rem; 
   background-color: #333;
   padding: 0 1rem;
   display: flex;
@@ -24,7 +22,7 @@
 /* each item */
 .navbar li {
   margin-right: 1rem;
-  position: relative;            /* for dropdown positioning */
+  position: relative;
 }
 
 /* plain links and buttons */

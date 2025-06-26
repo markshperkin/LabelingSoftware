@@ -14,7 +14,6 @@ html, body, .App {
   left: 50%;
   transform: translate(-50%, -50%); 
   
-  /* sizing */
   width: 50%;   
   max-width: 600px;  
 
@@ -78,8 +77,8 @@ html, body, .App {
   position: absolute;
   top: 0;
   bottom: 0;
-  left: 81px;    /* ⬅︎ how much you want to inset from left */
-  right: -34px;   /* ⬅︎ how much you want to inset from right */
+  left: 81px;
+  right: 20px;
   overflow: hidden;
   pointer-events: none;
 }
@@ -91,5 +90,4 @@ html, body, .App {
   width: 2px;
   background-color: red;
   pointer-events: none; 
-  /* transform: translateX(82px); */
 }

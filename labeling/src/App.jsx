@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import './App.css';
 import { uploadFiles, submitLabels } from './api';
 import Charts from './components/Charts';
@@ -7,78 +7,87 @@ import Navbar from './components/Navbar';
 
 function App() {
   const [files, setFiles] = useState({ accel: null, gyro: null, video: null });
-  const [sensorData, setSensorData] = useState(null);
-  const [segments, setSegments] = useState([]);
-  const videoRef = useRef(null);
+  const [rawData, setRawData]       = useState(null);
+  const [trimmedData, setTrimmedData] = useState(null);
+  const [segments, setSegments]     = useState([]);
   const [currentTimeMs, setCurrentTimeMs] = useState(0);
+  const videoRef = useRef(null);
 
-  const handleFileChange = (e) => {
+  const handleFileChange = e => {
     setFiles(f => ({ ...f, [e.target.name]: e.target.files[0] }));
   };
 
-  function handleSegmentComplete(segment) {
+  const handleSegmentComplete = segment =>
     setSegments(s => [...s, segment]);
-  }
 
-  async function handleUpload() {
-    try {
-      const { accelData, gyroData, videoUrl, firstTimestamp } =
-        await uploadFiles(files.accel, files.gyro, files.video);
+  const handleUpload = async () => {
+    const { accelData, gyroData, videoUrl, firstTimestamp } =
+      await uploadFiles(files.accel, files.gyro, files.video);
 
-      const accel = accelData.map(d => ({
-        ...d,
-        timestamp: d.timestamp - firstTimestamp
-      }));
-      const gyro = gyroData.map(d => ({
-        ...d,
-        timestamp: d.timestamp - firstTimestamp
-      }));
+    const accel = accelData.map(d => ({
+      ...d,
+      timestamp: d.timestamp - firstTimestamp
+    }));
+    const gyro = gyroData.map(d => ({
+      ...d,
+      timestamp: d.timestamp - firstTimestamp
+    }));
 
-      setSensorData({ accel, gyro, videoUrl });
-      setCurrentTimeMs(0);
-    } catch(err) {
-      console.error(err);
-      alert('Upload failed :(');
-    }
-  }
+    setRawData({ accel, gyro, videoUrl });
+    setCurrentTimeMs(0);
+    setTrimmedData(null);
+  };
 
-  async function handleSaveSegments(segments) {
-    try {
-      await submitLabels(segments);
-      alert('SAVED!');
-    } catch(err) {
-      console.error(err);
-      alert('Labels failed to save');
-    }
-  }
+  useEffect(() => {
+    if (!rawData || !videoRef.current) return;
+    const video = videoRef.current;
+    const onMeta = () => {
+      const durMs = video.duration * 1000;
+      setTrimmedData({
+        videoUrl: rawData.videoUrl,
+        accel: rawData.accel.filter(pt => pt.timestamp <= durMs),
+        gyro: rawData.gyro.filter(pt => pt.timestamp <= durMs)
+      });
+    };
+    video.addEventListener('loadedmetadata', onMeta);
+    return () => video.removeEventListener('loadedmetadata', onMeta);
+  }, [rawData]);
 
-  // called when you hover the chart
-  const handleHover = (t_ms) => {
-    if (videoRef.current) {
-      videoRef.current.currentTime = t_ms / 1000;
-    }
+  const handleTimeUpdate = sec => {
+    if (!trimmedData || !videoRef.current) return;
+    const maxT = trimmedData.accel[trimmedData.accel.length - 1].timestamp;
+    const t_ms = (sec / videoRef.current.duration) * maxT;
     setCurrentTimeMs(t_ms);
   };
 
-  // compute max timestamp once per render
-  const maxT = sensorData
-    ? sensorData.accel[sensorData.accel.length - 1].timestamp
+  const handleHover = t_ms => {
+    if (videoRef.current) videoRef.current.currentTime = t_ms / 1000;
+    setCurrentTimeMs(t_ms);
+  };
+
+  const maxT = trimmedData
+    ? trimmedData.accel[trimmedData.accel.length - 1].timestamp
     : 1;
-  const playPct = sensorData
-  ? Math.min(Math.max(currentTimeMs / maxT, 0), 1) * 100
-  : 0;
+  const playPct = trimmedData
+    ? Math.min(Math.max(currentTimeMs / maxT, 0), 1) * 100
+    : 0;
+
+  const handleSaveSegments = async segs => {
+    await submitLabels(segs);
+    alert('SAVED!');
+  };
 
   return (
     <div className="App">
       <Navbar
-        sensorData={sensorData}
-        onUploadNew={() => setSensorData(null)}
+        sensorData={trimmedData}
+        onUploadNew={() => setRawData(null)}       
         onExportLabels={() => handleSaveSegments(segments)}
       />
 
-      { !sensorData ? (
+      {!rawData ? (
         <div className="upload-form">
-          <h2>Upload Sensor & Video Files</h2>
+                    <h2>Upload Sensor & Video Files</h2>
 
           <div className="input-group">
             <label htmlFor="accel">Accelerometer CSV</label>
@@ -105,28 +114,27 @@ function App() {
             <div className="video">
               <VideoPlayer
                 ref={videoRef}
-                src={sensorData.videoUrl}
-                onTimeUpdate={sec => setCurrentTimeMs(sec * 1000)}
+                src={rawData.videoUrl}
+                onTimeUpdate={handleTimeUpdate}
               />
             </div>
 
-            <div className="graphs">
-              <Charts
-                accel={sensorData.accel}
-                gyro={sensorData.gyro}
-                onHover={handleHover}
-                onSegmentComplete={handleSegmentComplete}
-              />
-              {/* declarative playhead */}
-              <div className='playhead-container'>
-              <div
-                className="playhead-line"
-                style={{
-                  left: `calc(${(currentTimeMs / maxT) * 100}% - 1px)`
-                }}
-              />
+            {trimmedData && (
+              <div className="graphs">
+                <Charts
+                  accel={trimmedData.accel}
+                  gyro={trimmedData.gyro}
+                  onHover={handleHover}
+                  onSegmentComplete={handleSegmentComplete}
+                />
+                <div className="playhead-container">
+                  <div
+                    className="playhead-line"
+                    style={{ left: `calc(${playPct}% - 1px)` }}
+                  />
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       )}

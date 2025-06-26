@@ -1,15 +1,9 @@
-# app.py
 import os
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import pandas as pd
 from werkzeug.utils import secure_filename
-# from dotenv import load_dotenv
 
-# # Load .env (if any)
-# load_dotenv()
-
-# Allowed file extensions
 ALLOWED_CSV = {'csv'}
 ALLOWED_VIDEO = {'mp4', 'mov', 'avi'}
 
@@ -26,12 +20,11 @@ def create_app():
 
     @app.route('/upload', methods=['POST'])
     def upload():
-        # 1) Get files
+        # get files
         accel = request.files.get('accel')
         gyro  = request.files.get('gyro')
         video = request.files.get('video')
 
-        # 2) Validate
         if not (accel and allowed_file(accel.filename, ALLOWED_CSV)):
             return jsonify(error='Missing or invalid accelerometer file'), 400
         if not (gyro and allowed_file(gyro.filename, ALLOWED_CSV)):
@@ -39,7 +32,7 @@ def create_app():
         if not (video and allowed_file(video.filename, ALLOWED_VIDEO)):
             return jsonify(error='Missing or invalid video file'), 400
 
-        # 3) Save to disk
+        # save files
         accel_path = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(accel.filename))
         gyro_path  = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(gyro.filename))
         video_name = secure_filename(video.filename)
@@ -49,16 +42,14 @@ def create_app():
         gyro.save(gyro_path)
         video.save(video_path)
 
-        # 4) Parse CSVs into JSON
+        # parse
         df_accel = pd.read_csv(accel_path)
         df_gyro  = pd.read_csv(gyro_path)
 
-        # Expect columns: timestamp, x, y, z
         accel_data = df_accel.to_dict(orient='records')
         gyro_data  = df_gyro.to_dict(orient='records')
         first_ts   = int(df_accel['timestamp'].iloc[0])
 
-        # 5) Return payload
         return jsonify({
           'accelData': accel_data,
           'gyroData':  gyro_data,
@@ -72,7 +63,6 @@ def create_app():
         if not isinstance(segments, list):
             return jsonify(error='Expected a list of segments'), 400
 
-        # Write out labels.csv
         df = pd.DataFrame(segments)
         out_path = os.path.join(app.config['UPLOAD_FOLDER'], 'labels.csv')
         df.to_csv(out_path, index=False)
