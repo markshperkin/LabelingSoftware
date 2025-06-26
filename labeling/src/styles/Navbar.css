@@ -1,0 +1,91 @@
+/* Navbar.css */
+
+.navbar {
+  position: fixed;     /* pin it */
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3rem;        /* pick a height */
+  background-color: #333;
+  padding: 0 1rem;
+  display: flex;
+  align-items: center;
+  z-index: 1000; 
+}
+
+/* list wrapper */
+.navbar ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+/* each item */
+.navbar li {
+  margin-right: 1rem;
+  position: relative;            /* for dropdown positioning */
+}
+
+/* plain links and buttons */
+.navbar a,
+.navbar button {
+  color: #fff;
+  text-decoration: none;
+  background: none;
+  border: none;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+}
+
+/* regular button style */
+.navbar .nav-button {
+  background-color: #555;
+  border-radius: 4px;
+}
+
+/* dropdown container */
+.navbar .dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* dropdown trigger (can be a <button> or <a>) */
+.navbar .dropdown .dropbtn {
+  background-color: #555;
+  border-radius: 4px;
+}
+
+/* dropdown menu */
+.navbar .dropdown-content {
+  display: none;
+  position: absolute;
+  top: 100%; 
+  left: 0;
+  background-color: #fff;
+  min-width: 8rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+  z-index: 10;
+}
+
+/* items inside dropdown */
+.navbar .dropdown-content a {
+  color: #333;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  display: block;
+}
+
+/* hover effect on dropdown items */
+.navbar .dropdown-content a:hover {
+  background-color: #f0f0f0;
+}
+
+.segment-legend-color.x {
+  background-color: #FF4C4C;
+}
+.segment-legend-color.y {
+  background-color: #4C9EFF;
+}
+.segment-legend-color.z {
+  background-color: #4CFF88;
+}
