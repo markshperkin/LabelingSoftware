@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import './App.css';
 import { uploadFiles, submitLabels } from './api';
 import Charts from './components/Charts';
@@ -12,13 +12,20 @@ function App() {
   const [segments, setSegments]     = useState([]);
   const [currentTimeMs, setCurrentTimeMs] = useState(0);
   const videoRef = useRef(null);
+  const [activeLabel, setActiveLabel]     = useState(null);
+  const [pendingSegments, setPendingSegments]      = useState([]);
+  const [savedSegments, setSavedSegments]          = useState([]);
+
+  const combinedSegments = useMemo(
+    () => [...savedSegments, ...pendingSegments],
+    [savedSegments, pendingSegments]
+  );
+
 
   const handleFileChange = e => {
     setFiles(f => ({ ...f, [e.target.name]: e.target.files[0] }));
   };
 
-  const handleSegmentComplete = segment =>
-    setSegments(s => [...s, segment]);
 
   const handleUpload = async () => {
     const { accelData, gyroData, videoUrl, firstTimestamp } =
@@ -65,6 +72,42 @@ function App() {
     setCurrentTimeMs(t_ms);
   };
 
+  // ---- Labeling callbacks ----
+
+  const handleSelectLabel = label => {
+    setActiveLabel(label);
+  };
+
+  const handleSegmentComplete = ({ t_x, t_l, label }) => {
+    if (!activeLabel) return;
+    setPendingSegments(p => {
+        const updated = [...p, { t_x, t_l, label}];
+        console.log('Added pending segmest:', { t_x, t_l, label });
+        console.log('Pending segment now:', updated)
+        return updated;
+    });
+  };
+
+  const handleUndo = () => {
+    setPendingSegments(p => p.slice(0, -1));
+  };
+
+  const handleSavePending = () => {
+    console.log('Saving pending segments:', pendingSegments);
+    setSavedSegments(s => {
+        const updatedSaved = [...s, ...pendingSegments];
+        console.log('Saved segments now:', updatedSaved);
+        return updatedSaved;
+    });
+    setPendingSegments([]);
+    setActiveLabel(null);
+  };
+
+  const handleExportLabels = async () => {
+    await submitLabels(savedSegments);
+    alert('Exported!');
+  };
+
   const maxT = trimmedData
     ? trimmedData.accel[trimmedData.accel.length - 1].timestamp
     : 1;
@@ -81,14 +124,21 @@ function App() {
     <div className="App">
       <Navbar
         sensorData={trimmedData}
-        onUploadNew={() => setRawData(null)}       
-        onExportLabels={() => handleSaveSegments(segments)}
+        onUploadNew={() => {
+            setRawData(null);
+            setSavedSegments([]);
+            setPendingSegments([]);
+        }}       
+        onExportLabels={handleExportLabels}
+        pendingCount={pendingSegments.length}
+        onSelectLabel={handleSelectLabel}
+        onUndo={handleUndo}
+        onSavePending={handleSavePending}
       />
 
       {!rawData ? (
         <div className="upload-form">
-                    <h2>Upload Sensor & Video Files</h2>
-
+        <h2>Upload Sensor & Video Files</h2>
           <div className="input-group">
             <label htmlFor="accel">Accelerometer CSV</label>
             <input type="file" name="accel" accept=".csv" onChange={handleFileChange} />
@@ -109,6 +159,9 @@ function App() {
           </button>
         </div>
       ) : (
+
+        // labeling interface
+
         <div className="labeling-container">
           <div className="visualization">
             <div className="video">
@@ -124,6 +177,8 @@ function App() {
                 <Charts
                   accel={trimmedData.accel}
                   gyro={trimmedData.gyro}
+                  activeLabel={activeLabel}
+                  segments={combinedSegments}
                   onHover={handleHover}
                   onSegmentComplete={handleSegmentComplete}
                 />
