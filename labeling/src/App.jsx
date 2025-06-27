@@ -1,53 +1,74 @@
 import { useState, useRef, useEffect, useMemo } from 'react';
 import './App.css';
-import { uploadFiles, submitLabels } from './api';
+import { listRuns, getRun, saveLabels } from './api';
 import Charts from './components/Charts';
 import VideoPlayer from './components/VideoPlayer';
 import Navbar from './components/Navbar';
 
 function App() {
-  const [files, setFiles] = useState({ accel: null, gyro: null, video: null });
-  const [rawData, setRawData]       = useState(null);
+  const [rawData, setRawData] = useState(null);
   const [trimmedData, setTrimmedData] = useState(null);
-  const [segments, setSegments]     = useState([]);
   const [currentTimeMs, setCurrentTimeMs] = useState(0);
   const videoRef = useRef(null);
-  const [activeLabel, setActiveLabel]     = useState(null);
-  const [pendingSegments, setPendingSegments]      = useState([]);
-  const [savedSegments, setSavedSegments]          = useState([]);
+  const [activeLabel, setActiveLabel] = useState(null);
+  const [pendingSegments, setPendingSegments] = useState([]);
+  const [savedSegments, setSavedSegments] = useState([]);
+
+  // run selector state
+  const [runs, setRuns] = useState([]);
+  const [selectedRun, setSelectedRun] = useState(null);
 
   const combinedSegments = useMemo(
     () => [...savedSegments, ...pendingSegments],
     [savedSegments, pendingSegments]
   );
 
+  useEffect(() => {
+    listRuns()
+      .then(data => {
+        if (Array.isArray(data)) setRuns(data);
+        else console.error('Expected runs array, got:', data);
+      })
+      .catch(err => console.error('listRuns failed', err));
+  }, []);
 
-  const handleFileChange = e => {
-    setFiles(f => ({ ...f, [e.target.name]: e.target.files[0] }));
-  };
+  // when the user picks a run, load its data
+  const handleRunSelect = async runId => {
+    const { accelData, gyroData, videoUrl, labels, status } = await getRun(runId);
+    // find the labelId for this run:
+    const runMeta = runs.find(r => r.id === runId);
+    const firstTs = parseInt(runMeta.labelId, 10);
 
-
-  const handleUpload = async () => {
-    const { accelData, gyroData, videoUrl, firstTimestamp } =
-      await uploadFiles(files.accel, files.gyro, files.video);
-
+    // zero-base
     const accel = accelData.map(d => ({
       ...d,
-      timestamp: d.timestamp - firstTimestamp
+      timestamp: d.timestamp - firstTs
     }));
     const gyro = gyroData.map(d => ({
       ...d,
-      timestamp: d.timestamp - firstTimestamp
+      timestamp: d.timestamp - firstTs
     }));
 
     setRawData({ accel, gyro, videoUrl });
+    setTrimmedData({ accel, gyro, videoUrl });
+    setSavedSegments(labels);
+    setPendingSegments([]);
     setCurrentTimeMs(0);
-    setTrimmedData(null);
+    setSelectedRun(runId);
   };
+
+  // export (save) labels back to the server
+  const handleExportLabels = async () => {
+    if (!selectedRun) return;
+    await saveLabels(selectedRun, savedSegments);
+    alert('Labels saved to server for run ' + selectedRun);
+  };
+
 
   useEffect(() => {
     if (!rawData || !videoRef.current) return;
     const video = videoRef.current;
+    
     const onMeta = () => {
       const durMs = video.duration * 1000;
       setTrimmedData({
@@ -61,8 +82,11 @@ function App() {
   }, [rawData]);
 
   const handleTimeUpdate = sec => {
-    if (!trimmedData || !videoRef.current) return;
-    const maxT = trimmedData.accel[trimmedData.accel.length - 1].timestamp;
+    const data = trimmedData || rawData;
+    if (!data || !videoRef.current) return;
+    const maxT = data.accel.length
+      ? data.accel[data.accel.length - 1].timestamp
+      : 1;
     const t_ms = (sec / videoRef.current.duration) * maxT;
     setCurrentTimeMs(t_ms);
   };
@@ -72,7 +96,7 @@ function App() {
     setCurrentTimeMs(t_ms);
   };
 
-  // ---- Labeling callbacks ----
+  // labeling callbacks
 
   const handleSelectLabel = label => {
     setActiveLabel(label);
@@ -103,22 +127,15 @@ function App() {
     setActiveLabel(null);
   };
 
-  const handleExportLabels = async () => {
-    await submitLabels(savedSegments);
-    alert('Exported!');
-  };
 
   const maxT = trimmedData
     ? trimmedData.accel[trimmedData.accel.length - 1].timestamp
     : 1;
+
   const playPct = trimmedData
     ? Math.min(Math.max(currentTimeMs / maxT, 0), 1) * 100
     : 0;
 
-  const handleSaveSegments = async segs => {
-    await submitLabels(segs);
-    alert('SAVED!');
-  };
 
   return (
     <div className="App">
@@ -136,29 +153,23 @@ function App() {
         onSavePending={handleSavePending}
       />
 
-      {!rawData ? (
-        <div className="upload-form">
-        <h2>Upload Sensor & Video Files</h2>
-          <div className="input-group">
-            <label htmlFor="accel">Accelerometer CSV</label>
-            <input type="file" name="accel" accept=".csv" onChange={handleFileChange} />
+      {/* select run ui */}
+        {!rawData ? (
+          <div className="run-grid">
+            {runs.map(run => (
+              <div
+                key={run.id}
+                className="run-box"
+                onClick={() => handleRunSelect(run.id)}
+              >
+                <div className="run-id">{run.id}</div>
+                <div className={`status ${run.status}`}>
+                  {run.status.replace('_', ' ')}
+                </div>
+              </div>
+            ))}
           </div>
-          <div className="input-group">
-            <label htmlFor="gyro">Gyroscope CSV</label>
-            <input type="file" name="gyro"  accept=".csv" onChange={handleFileChange} />
-          </div>
-          <div className="input-group">
-            <label htmlFor="video">Ground Truth Video</label>
-            <input type="file" name="video" accept=".mp4" onChange={handleFileChange} />
-          </div>
-          <button
-            onClick={handleUpload}
-            disabled={!(files.accel && files.gyro && files.video)}
-          >
-            Upload & Visualize
-          </button>
-        </div>
-      ) : (
+        ) : (
 
         // labeling interface
 

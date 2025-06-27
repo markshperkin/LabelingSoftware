@@ -6,9 +6,9 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/upload':  'http://localhost:5000',
-      '/labels':  'http://localhost:5000',
-      '/uploads': 'http://localhost:5000'   // ← add this line
+      '/runs': 'http://localhost:5000',
+      '/runs/': 'http://localhost:5000', // for nested routes
+      '/data': 'http://localhost:5000'    // if you serve videos under /data
     }
   }
 })

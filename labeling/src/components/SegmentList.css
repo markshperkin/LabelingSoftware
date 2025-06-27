@@ -1,16 +1,15 @@
-/* Legend container */
 .segment-legend {
   margin-bottom: 1rem;
 }
 
-/* Each legend row */
+/* each legend row */
 .segment-legend-item {
   display: flex;
   align-items: center;
   margin-bottom: 0.5rem;
 }
 
-/* The colored dot */
+/* the colored dot */
 .segment-legend-color {
   width: 12px;
   height: 12px;
@@ -19,7 +18,6 @@
   margin-right: 8px;
 }
 
-/* Match your chart strokes */
 .segment-legend-color.x {
   background-color: #FF4C4C;
 }

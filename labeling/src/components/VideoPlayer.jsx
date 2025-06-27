@@ -1,20 +1,28 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useRef, useImperativeHandle } from 'react';
 
-const VideoPlayer = forwardRef(({ src, onTimeUpdate }, ref) => {
+const VideoPlayer = forwardRef(({ src, onLoadedMetadata, onTimeUpdate }, ref) => {
+  const videoEl = useRef(null);
+
+  // let parent ref access the <video> DOM node
+  useImperativeHandle(ref, () => videoEl.current);
+
+  const handleLoadedMetadata = (e) => {
+    if (onLoadedMetadata) onLoadedMetadata(e);
+  };
+
   const handleTimeUpdate = (e) => {
-    if (onTimeUpdate) {
-      onTimeUpdate(e.target.currentTime);
-    }
+    if (onTimeUpdate) onTimeUpdate(e.target.currentTime);
   };
 
   return (
     <video
-      ref={ref}
+      ref={videoEl}
       src={src}
       controls
       width="100%"
-      onTimeUpdate={handleTimeUpdate}
       style={{ marginTop: '16px' }}
+      onLoadedMetadata={handleLoadedMetadata}
+      onTimeUpdate={handleTimeUpdate}
     />
   );
 });

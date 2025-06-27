@@ -17,6 +17,10 @@ const Charts = ({
   onSegmentComplete
 }) => {
 
+  console.log('[Charts] accel.length =', accel?.length,
+              'gyro.length =',  gyro?.length,
+              'segments =', segments);
+
   const [startMs, setStartMs] = useState(null);
   const colors = {
     'Cycle': '#e74c9e',
