@@ -2,6 +2,7 @@ html, body, .App {
   margin: 0;
   height: 100vh;
   width: 100vw;
+  margin-top: 10px;
 }
 #root {
   margin: 0 auto;
@@ -12,20 +13,21 @@ html, body, .App {
   flex-wrap: wrap;
   gap: 16px;
   padding: 16px;
+  margin-top: 90px;
 }
 
 .run-box {
-  border: 1px solid #ccc;
+  border: 1px solid #ebe7e7;
   border-radius: 8px;
   padding: 16px;
   width: 120px;
   text-align: center;
   cursor: pointer;
-  transition: box-shadow 0.2s ease;
+  transition: box-shadow 0.5s ease;
 }
 
 .run-box:hover {
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 8px rgba(134, 127, 127, 0.15);
 }
 
 .run-id {

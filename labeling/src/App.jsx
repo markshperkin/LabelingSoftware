@@ -36,8 +36,7 @@ function App() {
   const handleRunSelect = async runId => {
     const { accelData, gyroData, videoUrl, labels, status } = await getRun(runId);
     // find the labelId for this run:
-    const runMeta = runs.find(r => r.id === runId);
-    const firstTs = parseInt(runMeta.labelId, 10);
+    const firstTs = accelData[0]?.timestamp ?? 0;
 
     // zero-base
     const accel = accelData.map(d => ({

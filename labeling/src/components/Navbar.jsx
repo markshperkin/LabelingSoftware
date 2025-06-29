@@ -11,21 +11,40 @@ const Navbar = ({
   onSavePending
 }) => {
   // hard coded labels for the dropdown
-  const labels = ['Cycle', 'Underwater', 'Turn', 'Push'];
-    const colorsLabels = {
-    'Cycle': '#e74c9e',
-    'Underwater': '#27de00',
-    'Turn': '#27ae60',
-    'Push': '#9980e9'
+  const labels = [
+    'Freestyle',
+    'Backstroke',
+    'Butterfly',
+    'Breaststroke',
+    'Underwater glide',
+    'Underwater kick',
+    'Push-off',
+    'Turn',
+    'Wall touch',
+    'Rest'
+  ];
+
+  // a color for each
+  const colorsLabels = {
+    'Freestyle':        '#e74c3c', // red
+    'Backstroke':       '#3498db', // blue
+    'Butterfly':        '#f39c12', // orange
+    'Breaststroke':     '#2ecc71', // green
+    'Underwater glide': '#1abc9c', // teal
+    'Underwater kick':  '#9b59b6', // purple
+    'Push-off':         '#e67e22', // pumpkin
+    'Turn':             '#d35400', // dark orange
+    'Wall touch':       '#c0392b', // dark red
+    'Rest':             '#7f8c8d'  // gray
   };
 
-  const legend = ['X-axis', 'Y-axis', 'Z-axis'];
   const colorsLegend = {
     'X-axis': '#e74c3c',
     'Y-axis': '#27ae60',
     'Z-axis': '#2980b9'
   };
 
+  const legend = ['X-axis', 'Y-axis', 'Z-axis'];
   const [activeLabel, setActiveLabel] = useState(null);
 
   const handleLabelClick = (label) => {

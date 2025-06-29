@@ -23,10 +23,16 @@ const Charts = ({
 
   const [startMs, setStartMs] = useState(null);
   const colors = {
-    'Cycle': '#e74c9e',
-    'Underwater': '#27de00',
-    'Turn': '#27ae60',
-    'Push': '#9980e9'
+    'Freestyle':        '#e74c3c',
+    'Backstroke':       '#3498db',
+    'Butterfly':        '#f39c12',
+    'Breaststroke':     '#2ecc71',
+    'Underwater glide': '#1abc9c',
+    'Underwater kick':  '#9b59b6',
+    'Push-off':         '#e67e22',
+    'Turn':             '#d35400',
+    'Wall touch':       '#c0392b',
+    'Rest':             '#7f8c8d'
   };
 
   const handleClick = e => {
