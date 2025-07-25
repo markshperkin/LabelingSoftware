@@ -17,7 +17,7 @@ backend/
     └── 01/  
         ├── accel_<sample>.csv  
         ├── gyro_<sample>.csv  
-        ├── labels_<sample>.csv    # is generated when automatically  
+        ├── labels_<sample>.csv    # is generated automatically  
         ├── metadata.json  
         └── video01.mp4  
 ```
@@ -36,14 +36,7 @@ The labeling session should initially contain:
 ### video.mp4 - Ground truth video
 Note that the video must be shorter than the sensor data stream to ensure proper alignment during annotation.
 
-
-
-
 ## Implementation Details
-
-This project was developed based on the research paper **"[Deep High-Resolution Representation Learning for Human Pose Estimation](https://openaccess.thecvf.com/content_CVPR_2019/papers/Sun_Deep_High-Resolution_Representation_Learning_for_Human_Pose_Estimation_CVPR_2019_paper.pdf)"** 
-by Ke Sun, Bin Xiao, Dong Liu, and Jingdong Wang. The paper introduces HRNet, which maintains high-resolution representations throughout the process, achieving superior accuracy in pose estimation tasks.
-This project's implementation draws inspiration from Bin Xiao's official HRNet repository, which is available on GitHub [here](https://github.com/leoxiaobin/deep-high-resolution-net.pytorch?tab=readme-ov-file).
 
 ## Installation
 
