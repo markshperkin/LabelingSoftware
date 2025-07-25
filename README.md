@@ -72,14 +72,20 @@ Follow this tutorial: https://www.geeksforgeeks.org/how-to-download-and-install-
  - Ensure that each label matches its color name
 
 ### Start labeling:
-1. Select a sample
-2. Select a label
-3. First click to start the segment. Second click to end the segment
-4. Press *undo* to remove last segment
-5. Once done, press *save* and *export*
-6. Press *home* to select a new sample
+1. Select a sample from the home screen.
+2. Choose a label from the label bar.
+3. Click once on the chart to start a segment, then click again to end it.
+4. Press *Undo* to remove the most recent segment.
+5. Once finished, press *Save* to store your annotations, and then *Export Labels* to generate the label file.
+6. Press *Home* to select a new sample.
 
 ## Thesis Project
 
-This project was developed as part of [Neural Networks and Their Applications class](https://cse.sc.edu/class/584) and [Machine Learning Systems class](https://cse.sc.edu/class/585) under the instruction of [Professor Vignesh Narayanan](https://sc.edu/study/colleges_schools/engineering_and_computing/faculty-staff/narayanan_vignesh.php) and [Professor Pooyan Jamshidi](https://sc.edu/study/colleges_schools/engineering_and_computing/faculty-staff/Jamshidi.php) at the University of South Carolina.
+This tool was developed as part of my M.S. thesis research on human activity recognition using wearable sensor data. it wasically used to annotate swimming motion data collected from a single wrist-worn IMU.  
+The thesis was guided by the following University of South Carolina faculty:  
+ - [Homayoun Valafar](https://www.sc.edu/study/colleges_schools/engineering_and_computing/faculty-staff/homayounvalafar.php)
+ - [Ramtin Zand](https://www.sc.edu/study/colleges_schools/engineering_and_computing/faculty-staff/zand.php)
+ - [Vignesh Narayanan](https://sc.edu/study/colleges_schools/engineering_and_computing/faculty-staff/narayanan_vignesh.php)
+ - [Forest Agostinelli](https://www.sc.edu/study/colleges_schools/engineering_and_computing/faculty-staff/forest_agostinelli.php)
+
 
