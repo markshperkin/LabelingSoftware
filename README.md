@@ -68,9 +68,15 @@ Follow this tutorial: https://www.geeksforgeeks.org/how-to-download-and-install-
 ## Usage
 
 ### Update the labeling interface:
- - Update the label names and colors in both *Charts.jsx* and *Navbar.jsx* who are located in **Labeling->src->components**
+ - Update the label names and colors in both *Charts.jsx* and *Navbar.jsx* who are located in *Labeling->src->components*
  - Ensure that each label matches its color name
 
+### Start labeling:
+1. Select a sample
+2. Select a label
+3. First click to start the segment. Second click to end the segment
+4. Press *undo* to remove last segment
+5. Once done, press save and export
 
 ## Class Project
 
