@@ -1,7 +1,9 @@
 # IMU Data Labeling Software
 
 ## Overview
-This project is a web-based labeling tool designed to annotate accelerometer and gyroscope time-series data. While it was originally developed for swimming activity analysis, it is general-purpose and can be adapted to other motion datasets involving IMU sensors.
+This project is a web-based labeling tool designed to annotate accelerometer and gyroscope time-series data. While it was originally developed for swimming activity analysis, it is general-purpose and can be adapted to other motion datasets involving IMU sensors.  
+This tool was developed as part of my M.S. thesis research on human activity recognition using wearable sensor data. it wasically used to annotate swimming motion data collected from a single wrist-worn IMU.  
+
 
 ## Key Features
  - Intuitive interface for creating and managing class-specific segments  
@@ -17,7 +19,7 @@ backend/
     └── 01/  
         ├── accel_<sample>.csv  
         ├── gyro_<sample>.csv  
-        ├── labels_<sample>.csv    # is generated automatically  
+        ├── labels_<sample>.csv    # generated automatically  
         ├── metadata.json  
         └── video01.mp4  
 ```
@@ -80,8 +82,6 @@ Follow this tutorial: https://www.geeksforgeeks.org/how-to-download-and-install-
 6. Press *Home* to select a new sample.
 
 ## Thesis Project
-
-This tool was developed as part of my M.S. thesis research on human activity recognition using wearable sensor data. it wasically used to annotate swimming motion data collected from a single wrist-worn IMU.  
 The thesis was guided by the following University of South Carolina faculty:  
  - [Homayoun Valafar](https://www.sc.edu/study/colleges_schools/engineering_and_computing/faculty-staff/homayounvalafar.php)
  - [Ramtin Zand](https://www.sc.edu/study/colleges_schools/engineering_and_computing/faculty-staff/zand.php)
