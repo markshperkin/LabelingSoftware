@@ -36,24 +36,34 @@ The labeling session should initially contain:
 ### video.mp4 - Ground truth video
 Note that the video must be shorter than the sensor data stream to ensure proper alignment during annotation.
 
-## Implementation Details
-
 ## Installation
+
+### install npm:
+Follow this tutorial: https://www.geeksforgeeks.org/how-to-download-and-install-node-js-and-npm/
 
 1. Clone this repository to your local machine:
     ```bash
-    git clone https://github.com/markshperkin/SwimmingPoseEstimation.git
+    git clone https://github.com/markshperkin/LabelingSoftware.git
     ```
 
 2. Navigate into the project directory:
     ```bash
-    cd SwimmingPoseEstimation
+    cd LabelingSoftware
     ```
 
 3. Install the required packages:
     ```bash
     pip install -r requirements.txt
     ```
+4. Using two terminals, init the system
+```bash
+cd backend
+python app.py
+```
+```bash
+cd labeling
+npm run dev
+```
 
 ## Usage
 
