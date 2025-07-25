@@ -76,9 +76,9 @@ Follow this tutorial: https://www.geeksforgeeks.org/how-to-download-and-install-
 2. Select a label
 3. First click to start the segment. Second click to end the segment
 4. Press *undo* to remove last segment
-5. Once done, press save and export
+5. Once done, press *save* and *export*
 
-## Class Project
+## Thesis Project
 
 This project was developed as part of [Neural Networks and Their Applications class](https://cse.sc.edu/class/584) and [Machine Learning Systems class](https://cse.sc.edu/class/585) under the instruction of [Professor Vignesh Narayanan](https://sc.edu/study/colleges_schools/engineering_and_computing/faculty-staff/narayanan_vignesh.php) and [Professor Pooyan Jamshidi](https://sc.edu/study/colleges_schools/engineering_and_computing/faculty-staff/Jamshidi.php) at the University of South Carolina.
 
