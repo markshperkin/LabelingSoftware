@@ -11,6 +11,7 @@ Local database management
 ## Database setup
 This project does not rely on a traditional database. Instead, all labeled data is stored in a structured file system within the backend/data/ directory.  
 Inside the backend folder, create a "data" directory. Each data sample should reside in its own uniquely named subfolder (e.g., 01, 02, sample_01, etc.), containing the following files:
+'''
 backend/  
 └── data/  
     └── 01/  
@@ -19,6 +20,7 @@ backend/
         ├── labels_<sample>.csv    // is generated when automatically  
         ├── metadata.json  
         └── video01.mp4  
+'''
 # Raw accelerometer and gyroscopre data must be formatted as:  
 timestamp, x, y, z
 # metadata.json for the labeling session initially contains:
