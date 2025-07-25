@@ -80,7 +80,7 @@ const Navbar = ({
               </button>
             </li>
 
-            {/* Label selector */}
+            {/* label selector */}
             <li className="dropdown">
               <button className="dropbtn">
                 { activeLabel || 'Select Label' } ▾

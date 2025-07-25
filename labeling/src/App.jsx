@@ -103,6 +103,21 @@ function App() {
 
   const handleSegmentComplete = ({ t_x, t_l, label }) => {
     if (!activeLabel) return;
+
+    const newStart = t_x - t_l / 2;
+    const newEnd = t_x + t_l / 2;
+    const existing = [...savedSegments, ...pendingSegments];
+
+    for (const seg of existing) {
+      const segStart = seg.t_x - seg.t_l / 2;
+      const segEnd = seg.t_x + seg.t_l / 2;
+
+      if (newStart <= segEnd && segStart <= newEnd) {
+        alert('this segment overlaps an existing segment and was not added :(');
+        return;
+      }
+    }
+
     setPendingSegments(p => {
         const updated = [...p, { t_x, t_l, label}];
         console.log('Added pending segmest:', { t_x, t_l, label });

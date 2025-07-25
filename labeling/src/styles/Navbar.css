@@ -47,7 +47,6 @@
   display: block;
 }
 
-/* dropdown trigger (can be a <button> or <a>) */
 .navbar .dropdown .dropbtn {
   background-color: #555;
   border-radius: 4px;
