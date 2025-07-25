@@ -17,7 +17,7 @@ backend/
     └── 01/  
         ├── accel_<sample>.csv  
         ├── gyro_<sample>.csv  
-        ├── labels_<sample>.csv    // is generated when automatically  
+        ├── labels_<sample>.csv    # is generated when automatically  
         ├── metadata.json  
         └── video01.mp4  
 ```
