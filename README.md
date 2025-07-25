@@ -21,13 +21,13 @@ backend/
         ├── metadata.json  
         └── video01.mp4  
 ```
-# Raw accelerometer and gyroscopre data must be formatted as:  
+### Raw accelerometer and gyroscopre data must be formatted as:  
 timestamp, x, y, z
 # metadata.json for the labeling session initially contains:
 {
   "status": "pending"
 }
-# video.mp4 is the ground truth video. Note, the video must be shorter than the sensor datastream to ensure proper alignment during annotation.
+### video.mp4 is the ground truth video. Note, the video must be shorter than the sensor datastream to ensure proper alignment during annotation.
 
 
 
