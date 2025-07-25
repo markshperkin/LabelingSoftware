@@ -56,14 +56,14 @@ Follow this tutorial: https://www.geeksforgeeks.org/how-to-download-and-install-
     pip install -r requirements.txt
     ```
 4. Using two terminals, init the system
-```bash
-cd backend
-python app.py
-```
-```bash
-cd labeling
-npm run dev
-```
+   ```bash
+   cd backend
+   python app.py
+   ```
+   ```bash
+   cd labeling
+   npm run dev
+   ```
 
 ## Usage
 
