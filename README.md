@@ -9,7 +9,7 @@ This project is a web-based labeling tool designed to annotate accelerometer and
  - Local database management  
 
 ## Database setup
-This project does not rely on a traditional database management system. Instead, all labeled data is stored in a structured file system within the backend/data/ directory.  
+This project does not rely on a traditional database management system. Instead, all labeled data is stored in a structured file system within the *backend/data/* directory.  
 Inside the backend folder, create a "data" directory. Each data sample should reside in its own uniquely named subfolder (e.g., 01, 02, sample_01, etc.), containing the following files:  
 ```
 backend/  
@@ -68,8 +68,8 @@ Follow this tutorial: https://www.geeksforgeeks.org/how-to-download-and-install-
 ## Usage
 
 ### Update the labeling interface:
- - Update the label names and colors in both *Charts.jsx* and *Navbar.jsx* who are located in Labeling->src->components
- - Ensure that each label matches his color name
+ - Update the label names and colors in both *Charts.jsx* and *Navbar.jsx* who are located in **Labeling->src->components**
+ - Ensure that each label matches its color name
 
 
 ## Class Project
