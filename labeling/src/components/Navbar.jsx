@@ -71,7 +71,7 @@ const Navbar = ({
           <>
             <li>
               <button className="nav-button" onClick={onUploadNew}>
-                Upload New File
+                Home
               </button>
             </li>
             <li>
