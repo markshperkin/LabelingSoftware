@@ -4,9 +4,9 @@
 This project is a web-based labeling tool designed to annotate accelerometer and gyroscope time-series data. While it was originally developed for swimming activity analysis, it is general-purpose and can be adapted to other motion datasets involving IMU sensors.
 
 ## Key Features
-Intuitive interface for creating and managing class-specific segments  
-Video synchronization support for accurate frame-by-frame labeling using ground truth footage  
-Local database management  
+ - Intuitive interface for creating and managing class-specific segments  
+ - Video synchronization support for accurate frame-by-frame labeling using ground truth footage  
+ - Local database management  
 
 ## Database setup
 This project does not rely on a traditional database management system. Instead, all labeled data is stored in a structured file system within the backend/data/ directory.  
