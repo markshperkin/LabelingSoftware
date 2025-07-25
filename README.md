@@ -77,6 +77,7 @@ Follow this tutorial: https://www.geeksforgeeks.org/how-to-download-and-install-
 3. First click to start the segment. Second click to end the segment
 4. Press *undo* to remove last segment
 5. Once done, press *save* and *export*
+6. Press *home* to select a new sample
 
 ## Thesis Project
 
