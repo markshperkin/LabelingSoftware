@@ -4,6 +4,8 @@
 This project is a web-based labeling tool designed to annotate accelerometer and gyroscope time-series data. While it was originally developed for swimming activity analysis, it is general-purpose and can be adapted to other motion datasets involving IMU sensors.  
 This tool was developed as part of my M.S. thesis research on human activity recognition using wearable sensor data. It was used to annotate swimming motion data collected from a single wrist-worn IMU worn by athletes from the [University of South Carolina's Division I SEC swim team](https://gamecocksonline.com/sports/swimming/).  
 
+## Preview:
+<img width="2530" height="1100" alt="image" src="https://github.com/user-attachments/assets/64a92152-1cd6-4e99-b298-02561af26edd" />
 
 ## Key Features
  - Intuitive interface for creating and managing class-specific segments  
@@ -87,5 +89,6 @@ The thesis was guided by the following University of South Carolina faculty:
  - [Ramtin Zand](https://www.sc.edu/study/colleges_schools/engineering_and_computing/faculty-staff/zand.php)
  - [Vignesh Narayanan](https://sc.edu/study/colleges_schools/engineering_and_computing/faculty-staff/narayanan_vignesh.php)
  - [Forest Agostinelli](https://www.sc.edu/study/colleges_schools/engineering_and_computing/faculty-staff/forest_agostinelli.php)
+
 
 
