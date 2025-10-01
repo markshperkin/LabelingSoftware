@@ -8,7 +8,7 @@ import pandas.errors
 def create_app():
     app = Flask(__name__)
     CORS(app)
-
+    API_BASE = os.getenv('PUBLIC_API_BASE', 'https://labelingsoftware.onrender.com')
     DATA_FOLDER = os.getenv('DATA_FOLDER', 'data')
     os.makedirs(DATA_FOLDER, exist_ok=True)
     app.config['DATA_FOLDER'] = DATA_FOLDER
@@ -100,7 +100,7 @@ def create_app():
         return jsonify({
             'accelData': accel_data,
             'gyroData':  gyro_data,
-            'videoUrl':  f'/data/{run_id}/{video_fname}',
+            'videoUrl':  f'{API_BASE}/data/{run_id}/{video_fname}',
             'labels':    labels,
             'status':    status
         })
