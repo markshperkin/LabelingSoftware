@@ -1,6 +1,6 @@
 import os
 import json
-from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, request, jsonify, send_file, send_from_directory
 from flask_cors import CORS
 import pandas as pd
 import pandas.errors
@@ -122,15 +122,20 @@ def create_app():
         labels_fname = f'labels_{timestamp}.csv'
         labels_path = os.path.join(base, labels_fname)
 
-        pd.DataFrame(segments).to_csv(labels_path, index=False)
-        print(f"[save_labels] Wrote labels to {labels_path}")
+        # pd.DataFrame(segments).to_csv(labels_path, index=False)  # creates/overwrites the labels csv files
+        # print(f"[save_labels] Wrote labels to {labels_path}")
 
-        meta_path = os.path.join(base, 'metadata.json')
-        with open(meta_path, 'w') as f:
-            json.dump({'status': 'in_progress'}, f)
-        print(f"[save_labels] Updated status to in_progress in metadata.json")
+        # meta_path = os.path.join(base, 'metadata.json') # creates/overwrites the metadata in files
+        # with open(meta_path, 'w') as f:
+        #     json.dump({'status': 'completed'}, f)
+        # print(f"[save_labels] Updated status to completed in metadata.json")
 
-        return jsonify(status='ok')
+        return send_file(
+            labels_path,
+            mimetype='csv',
+            as_attachment=True,
+            download_name=labels_fname
+        )
 
     @app.route('/runs/<run_id>/status', methods=['PATCH'])
     def update_status(run_id):
