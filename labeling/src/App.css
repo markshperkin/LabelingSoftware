@@ -100,3 +100,45 @@ html, body, .App {
   background-color: red;
   pointer-events: none; 
 }
+
+/* center the loader and add a small caption */
+.loader-wrap {
+  min-height: 50vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.loader-text {
+  font-size: 0.95rem;
+  opacity: 0.75;
+  text-align: center;
+}
+
+/* custom loader found online */
+/* HTML: <div class="loader"></div> */ 
+.loader {
+  width: fit-content;
+  font-weight: bold;
+  font-family: monospace;
+  text-shadow: 
+    0 0 0 rgb(255 0 0), 
+    0 0 0 rgb(0 255 0), 
+    0 0 0 rgb(0 0 255);
+  font-size: 30px;
+  animation: l32 1s infinite cubic-bezier(0.5,-2000,0.5,2000);
+}
+.loader:before {
+  content:"Loading...";
+}
+
+@keyframes l32{
+  25%,100% {
+  text-shadow: 
+     0.03px -0.01px 0.01px rgb(255 0 0), 
+     0.02px  0.02px 0     rgb(0 255 0), 
+    -0.02px  0.02px 0     rgb(0 0 255);
+  }
+}

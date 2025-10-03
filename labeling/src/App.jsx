@@ -18,42 +18,57 @@ function App() {
   const [runs, setRuns] = useState([]);
   const [selectedRun, setSelectedRun] = useState(null);
 
+  // loading flags
+  const [runsLoading, setRunsLoading] = useState(true);
+  const [runLoading, setRunLoading] = useState(false);    
+
   const combinedSegments = useMemo(
     () => [...savedSegments, ...pendingSegments],
     [savedSegments, pendingSegments]
   );
 
+  // fetch list of runs on load
   useEffect(() => {
-    listRuns()
-      .then(data => {
-        if (Array.isArray(data)) setRuns(data);
-        else console.error('Expected runs array, got:', data);
-      })
-      .catch(err => console.error('listRuns failed', err));
+    setRunsLoading(true);
+    listRuns().then(data => {
+      if (Array.isArray(data)) setRuns(data);
+      else console.error("expected runs array, got: ", data);
+    })
+    .catch(err => console.error("listRuns failed ", err))
+    .finally(() => setRunsLoading(false));
   }, []);
 
   // when the user picks a run, load its data
   const handleRunSelect = async runId => {
-    const { accelData, gyroData, videoUrl, labels, status } = await getRun(runId);
-    // find the labelId for this run:
-    const firstTs = accelData[0]?.timestamp ?? 0;
+    setRunLoading(true);
+    try {
+      const { accelData, gyroData, videoUrl, labels } = await getRun(runId);
 
-    // zero-base
-    const accel = accelData.map(d => ({
-      ...d,
-      timestamp: d.timestamp - firstTs
-    }));
-    const gyro = gyroData.map(d => ({
-      ...d,
-      timestamp: d.timestamp - firstTs
-    }));
+      // find the labelId for this run:
+      const firstTs = accelData[0]?.timestamp ?? 0;
 
-    setRawData({ accel, gyro, videoUrl });
-    setTrimmedData({ accel, gyro, videoUrl });
-    setSavedSegments(labels);
-    setPendingSegments([]);
-    setCurrentTimeMs(0);
-    setSelectedRun(runId);
+      // zero-base
+      const accel = accelData.map(d => ({
+        ...d,
+        timestamp: d.timestamp - firstTs
+      }));
+      const gyro = gyroData.map(d => ({
+        ...d,
+        timestamp: d.timestamp - firstTs
+      }));
+
+      setRawData({ accel, gyro, videoUrl });
+      setTrimmedData({ accel, gyro, videoUrl });
+      setSavedSegments(labels);
+      setPendingSegments([]);
+      setCurrentTimeMs(0);
+      setSelectedRun(runId);
+    } catch (e) {
+      console.error('getRun failed', e);
+      alert('Failed to load run. If this is a cold start, try again in a bit.');
+    } finally {
+      setRunLoading(false);
+    }
   };
 
   // export (save) labels back to the server
@@ -150,6 +165,12 @@ function App() {
     ? Math.min(Math.max(currentTimeMs / maxT, 0), 1) * 100
     : 0;
 
+  const renderLoader = (text = 'Starting backend… (could take up to a minute)') => (
+    <div className="loader-wrap" role="status" aria-live="polite">
+      <div className="loader" />
+      <p className="loader-text">{text}</p>
+    </div>
+  );
 
   return (
     <div className="App">
@@ -169,6 +190,9 @@ function App() {
 
       {/* select run ui */}
         {!rawData ? (
+          (runsLoading || runLoading) ? (
+            renderLoader("Warming up server... this can take up to a minute")
+          ) : (
           <div className="run-grid">
             {runs.map(run => (
               <div
@@ -183,6 +207,7 @@ function App() {
               </div>
             ))}
           </div>
+          )
         ) : (
 
         // labeling interface
